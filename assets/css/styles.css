@@ -689,7 +689,7 @@ input { font: inherit; }
     box-shadow: var(--shadow-md);
     padding-top: 8px;
   }
-  body.nav-open .sidebar { transform: translateX(0); }
+  body.nav-open .sidebar { transform: translateX(0); padding-top: var(--topbar-h); }
   body.nav-open .scrim { opacity: 1; visibility: visible; }
   .reader { padding: 30px clamp(18px, 6vw, 40px) 80px; }
   .doc-controls { align-items: flex-start; }
