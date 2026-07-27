@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-22T16:35:44.105Z",
+  "generatedAt": "2026-07-27T12:39:54.835Z",
   "defaultSlug": "yatay-gecis",
   "guides": [
     {
@@ -13,12 +13,30 @@
         "formal": {
           "path": "guides/formal/yatay-gecis.md",
           "wip": true,
-          "updated": "2026-07-21"
+          "updated": "2026-07-27"
         }
       },
       "title": "yatay geçiş as a ytb student",
       "description": "field guide to horizontal transfer for international ytb students in türkiye.",
       "order": 1
+    },
+    {
+      "slug": "choicescript",
+      "versions": {
+        "informal": {
+          "path": "guides/informal/choicescript.md",
+          "wip": false,
+          "updated": "2026-07-27"
+        },
+        "formal": {
+          "path": "guides/formal/choicescript.md",
+          "wip": false,
+          "updated": "2026-07-27"
+        }
+      },
+      "title": "A Guide to the ChoiceScript Language",
+      "description": "A beginner-friendly walkthrough of writing interactive fiction with ChoiceScript, from your first scene to choices, stats, and reusable story logic.",
+      "order": 2
     }
   ]
 }
