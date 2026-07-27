@@ -221,7 +221,11 @@ Best of luck on ur applications. may u reach the heights u envision. im rooting 
 
 ## resources
 
-- [link 1](link1)
+- [YÖK Atlas](https://yokatlas.yok.gov.tr/) - for checking unis, their programs, their languages, their base scores this year
+- [YÖKSİS yatay geçiş quotas](https://yoksis.yok.gov.tr/websitesi/kontenjan/yatayGecis.zul) - to check the amount of students they are accepting this year
+- [National yatay geçiş regulation](https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13948&MevzuatTur=7&MevzuatTertip=5) - the official handbook for transfer applications in turkiye
+- [Ministry of National Education e-Denklik](https://edenklik.meb.gov.tr/) - in case you need to do your high school equivalence
+- [College Essay Guy](https://www.collegeessayguy.com/) - learn how to write beautifully
 
 :::tip 💖
 made with love 🫶 [kmab](https://kmab5.github.io)

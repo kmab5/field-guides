@@ -28,7 +28,7 @@ tl;dr: The transfer process relevant to most YTB students is **kurumlar arası y
 For the purposes of this guide, the goal is to move to another university while remaining in the same or an equivalent academic program—for example, transferring from Computer Engineering at one university to Computer Engineering at another.
 
 | Transfer type | What it covers | Relevant here? |
-|---|---|---|
+| --- | --- | --- |
 | **Kurum içi yatay geçiş** | Transfer between programs within the same university | Usually no |
 | **Kurumlar arası yatay geçiş** | Transfer between different universities | **Yes** |
 
@@ -383,6 +383,7 @@ Best of luck with your applications. Approach the process carefully, verify ever
 - [YÖKSİS yatay geçiş quotas](https://yoksis.yok.gov.tr/websitesi/kontenjan/yatayGecis.zul)
 - [National yatay geçiş regulation](https://www.mevzuat.gov.tr/mevzuat?MevzuatNo=13948&MevzuatTur=7&MevzuatTertip=5)
 - [Ministry of National Education e-Denklik](https://edenklik.meb.gov.tr/)
+- [College Essay Guy](https://www.collegeessayguy.com/)
 
 :::tip 💖
 Made with love by [kmab](https://kmab5.github.io).
