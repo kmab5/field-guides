@@ -671,7 +671,7 @@ input { font: inherit; }
   font-size: 0.72rem;
   color: var(--muted);
 }
-.translate-bar[hidden] {
+div#translateBar.translate-bar[hidden] {
    display: none;
 }
 /* translate button on-state */
