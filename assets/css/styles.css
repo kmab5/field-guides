@@ -671,6 +671,9 @@ input { font: inherit; }
   font-size: 0.72rem;
   color: var(--muted);
 }
+.translate-bar[hidden] {
+   display: none;
+}
 /* translate button on-state */
 #translateBtn[aria-expanded="true"] {
   background: color-mix(in oklch, var(--teal) 14%, transparent);
