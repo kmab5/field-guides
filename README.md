@@ -9,7 +9,7 @@ Every guide can exist in two registers:
 
 A switch in the top bar (next to the dark-mode button) flips between them; the reader's accent colour shifts to match — red for informal, teal for formal.
 
-The top bar also has a button to hide/show the sidebar (it collapses the sidebar on desktop and opens the guide drawer on mobile), and the **formal** version of any guide shows a Google Translate bar across the top so readers can translate the page into their own language.
+The top bar also has a button to hide/show the sidebar (it collapses the sidebar on desktop and opens the guide drawer on mobile), and a translate button next to the dark-mode button that summons a Google Translate bar so readers can translate the page into their own language.
 
 ---
 
@@ -137,9 +137,9 @@ Standard Markdown tables are wrapped so they scroll horizontally on small screen
 
 The favicon and logo live in [`public/brand/`](public/brand/): a minimal teal flame (a nod to the "a candle in the dark" tagline). `favicon.svg` is the modern icon, `favicon.ico` / `favicon-32.png` / `apple-touch-icon.png` are fallbacks wired up in `index.html`, and `logo.svg` / `logo.png` are the standalone mark. To restyle, edit the SVGs; the flame in the top bar is inlined in `index.html` and takes its colour from CSS.
 
-## Google Translate on the formal version
+## Google Translate
 
-The formal version of each guide shows a Google Translate bar at the top of the page. It's the free client-side **Website Translator** widget — there's nothing to sign up for and no API key. The widget script is already in `index.html`; it only needs the site to be served over HTTP (it won't run from `file://`), which GitHub Pages does. A couple of things worth knowing: Google translates the whole visible page, and Google no longer offers new Website Translator registrations, though the existing embed script still works. If it's ever discontinued, the site keeps working — the bar simply won't appear.
+The translate button in the top bar (next to dark mode) toggles a Google Translate bar. It's hidden by default — click to summon it, click again to dismiss it — and when shown it sticks just under the top bar so it stays in reach while you scroll. **You don't need to do anything to set it up:** it's the free client-side **Website Translator** widget, with no signup and no API key, and the script is already embedded in `index.html`. A couple of things worth knowing: it only runs over HTTP (so it works on GitHub Pages but not by double-clicking the file locally), Google translates the whole visible page, and Google no longer offers new Website Translator registrations though the existing embed script still works. If it's ever discontinued the site keeps working — the bar simply won't populate.
 
 ## Running locally
 

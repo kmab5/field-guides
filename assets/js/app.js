@@ -250,9 +250,6 @@ async function renderCurrent() {
   reader.dataset.version = state.version;
   $("#regSwitch").setAttribute("aria-checked", String(state.version === "formal"));
 
-  // Google Translate bar shows only on an actual formal guide
-  $("#translateBar").hidden = !(state.version === "formal" && versionData);
-
   // sidebar active state
   document.querySelectorAll(".guide-item").forEach((a) =>
     a.toggleAttribute("aria-current", a.dataset.slug === guide.slug)
@@ -400,6 +397,14 @@ function wireEvents() {
   window.addEventListener("resize", updateSpy, { passive: true });
 
   $("#themeBtn").addEventListener("click", toggleTheme);
+
+  // translate bar toggle (hidden by default)
+  $("#translateBtn").addEventListener("click", () => {
+    const bar = $("#translateBar");
+    bar.hidden = !bar.hidden;
+    $("#translateBtn").setAttribute("aria-expanded", String(!bar.hidden));
+    $("#translateBtn").setAttribute("aria-label", bar.hidden ? "Show translation bar" : "Hide translation bar");
+  });
 
   $("#menuBtn").addEventListener("click", toggleSidebar);
   $("#scrim").addEventListener("click", closeDrawer);

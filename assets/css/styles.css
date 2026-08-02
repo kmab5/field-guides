@@ -654,8 +654,11 @@ input { font: inherit; }
 .reader[data-version="informal"] { --accent: var(--red); --accent-strong: var(--red-strong); --accent-soft: var(--red-soft); }
 .reader[data-version="formal"]   { --accent: var(--teal); --accent-strong: var(--teal-strong); --accent-soft: var(--teal-soft); }
 
-/* ---------- google translate bar (formal only) ---------- */
+/* ---------- google translate bar (toggled from the topbar) ---------- */
 .translate-bar {
+  position: sticky;
+  top: var(--topbar-h);
+  z-index: 55;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -663,9 +666,16 @@ input { font: inherit; }
   padding: 7px 20px;
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--muted);
+}
+/* translate button on-state */
+#translateBtn[aria-expanded="true"] {
+  background: color-mix(in oklch, var(--teal) 14%, transparent);
+  color: var(--teal);
+  border-color: color-mix(in oklch, var(--teal) 30%, var(--border));
 }
 .translate-label {
   letter-spacing: 0.06em;
