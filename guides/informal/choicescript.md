@@ -1,33 +1,33 @@
 ---
-title: A Guide to the ChoiceScript Language
-description: A beginner-friendly walkthrough of writing interactive fiction with ChoiceScript, from your first scene to choices, stats, and reusable story logic.
+title: a guide to the choicescript language
+description: how to actually write a choice of games style interactive story without the engine screaming at u about indentation.
 order: 2
 updated: 2026-07-27
 wip: false
 ---
 
-# A Guide to the ChoiceScript Language
+# a guide to the choicescript language
 
-So you want to make a Choice of Games-style interactive story.
+so u wanna make one of those choice of games style interactive stories. good choice honestly, theyre super fun to write.
 
-Good news: ChoiceScript is mostly plain text. You write the story normally, put commands on lines beginning with `*`, and indent the parts that belong inside choices or conditions.
+good news: choicescript is mostly just plain text. u write ur story like normal, put commands on lines that start with `*`, and indent the bits that live inside choices or conditions.
 
-Bad news: ChoiceScript takes indentation personally.
+bad news: choicescript takes indentation *personally*. like, one space out of place and it will refuse to speak to u. u have been warned.
 
-tl;dr: Start with `startup.txt`, declare your permanent stats there, list your scenes, write choices with `*choice`, and never let a choice option fall out of its indented block without a `*goto`, `*finish`, or another clear exit.
+tl;dr: start with `startup.txt`, declare ur permanent stats there, list ur scenes, write choices with `*choice`, and never ever let a choice option just fall off the end of its block without a `*goto`, `*finish`, or some other clear exit. thats like 80% of the errors ull ever hit.
 
-## What ChoiceScript actually is
+## what choicescript actually is
 
-ChoiceScript is a line-based scripting language for interactive fiction. A game is a folder of `.txt` files. The engine reads one line at a time.
+its a line-based scripting language for interactive fiction. a game is just a folder of `.txt` files, and the engine reads it one line at a time, top to bottom.
 
-A line can be:
+a line can be:
 
 - story text;
-- a command such as `*set courage +10`;
-- an option beginning with `#`; or
-- blank space separating paragraphs.
+- a command like `*set courage +10`;
+- an option that starts with `#`; or
+- blank space to separate paragraphs.
 
-That is the basic mental model.
+thats the whole mental model. keep that in ur head and half of this makes sense already.
 
 ```choicescript
 The corridor is dark.
@@ -39,22 +39,22 @@ The corridor is dark.
     *goto retreat
 ```
 
-:::important There are only 86 top-level commands
-ChoiceScript does not let you invent commands. If you write something like `*teleport` and it is not part of the language, the engine throws `Non-existent command`.
+:::important there are only 86 top-level commands
+u dont get to invent commands. if u write something like `*teleport` and its not a real part of the language, the engine just throws `Non-existent command` at u and gives up. the full list is at the very bottom if u ever wanna check whether something exists.
 :::
 
-## Your project folder
+## ur project folder
 
-The engine begins in `startup.txt`.
+the engine always starts in `startup.txt`. thats home base, dont rename it.
 
-A normal project includes:
+a normal project has:
 
 - `startup.txt`;
 - one or more story scenes;
 - optionally `choicescript_stats.txt`; and
-- web configuration outside the language itself.
+- some web config stuff that lives outside the language itself.
 
-Here is a tiny `startup.txt`:
+heres a tiny `startup.txt` to look at:
 
 ```choicescript
 *title My First ChoiceScript Game
@@ -68,35 +68,35 @@ Here is a tiny `startup.txt`:
 *goto_scene chapter_one
 ```
 
-The order under `*scene_list` matters because `*finish` moves to the next scene in that list.
+the order under `*scene_list` actually matters, cuz `*finish` sends the player to the *next* scene in that list. so the list is basically ur table of contents.
 
-:::warning Put initial commands first
-Commands such as `*create`, `*scene_list`, `*title`, `*author`, `*achievement`, `*product`, and `*ifid` belong at the beginning of `startup.txt`. Do not begin with story text and try to declare them later.
+:::warning put ur setup commands first
+stuff like `*create`, `*scene_list`, `*title`, `*author`, `*achievement`, `*product`, and `*ifid` all need to go at the very top of `startup.txt`. dont start with a paragraph of story and then try to sneak them in later, the engine hates that.
 :::
 
-## Write some prose
+## writing some actual prose
 
-Plain text is printed to the player.
+plain text just gets printed to the player. no ceremony.
 
 ```choicescript
 Rain runs down the window.
 The train does not slow down.
 ```
 
-Those two lines become one paragraph. Add a blank line to start a new paragraph.
+those two lines become *one* paragraph. wanna start a new paragraph? leave a blank line. thats it.
 
-Use `*line_break` when you want a smaller break without starting a new paragraph.
+if u want a smaller gap without a full new paragraph, use `*line_break`.
 
-You can also use:
+u also get some inline formatting:
 
 - `[b]bold[/b]`;
 - `[i]italics[/i]`;
 - `[url=https://example.com]links[/url]`; and
 - `[n/]` for an inline break.
 
-## Indentation: the thing that breaks everything
+## indentation: the thing that ruins everything
 
-ChoiceScript uses indentation instead of braces.
+choicescript uses indentation instead of curly braces. so the shape of ur file *is* the logic.
 
 ```choicescript
 *if courage > 50
@@ -107,11 +107,11 @@ ChoiceScript uses indentation instead of braces.
   *goto silence
 ```
 
-The two indented lines belong to the `*if`. The next two belong to the `*else`.
+the two indented lines belong to the `*if`. the next two belong to the `*else`. simple enough.
 
-Choose spaces or tabs and stick to that choice for the whole file.
+pick spaces OR tabs and then stick with that one choice for the entire file. mixing them is a fast way to make the engine cry.
 
-Do not do this:
+do NOT do this:
 
 ```choicescript
 *choice
@@ -121,13 +121,13 @@ Do not do this:
     *goto right
 ```
 
-The first option body and second option body do not line up. ChoiceScript notices.
+see how the first `*goto` and the second `*goto` dont line up? choicescript notices. choicescript always notices.
 
-PS. A code editor that visibly marks tabs and spaces will save you a lot of frustration.
+PS. get a code editor that visibly shows u tabs vs spaces. seriously. it will save u hours of pain.
 
-## Make your first choice
+## making ur first real choice
 
-A real branching choice looks like this:
+a proper branching choice looks like this:
 
 ```choicescript
 *choice
@@ -139,21 +139,21 @@ A real branching choice looks like this:
     *goto burned_letter
 ```
 
-Every option needs somewhere to go.
+every single option needs somewhere to go afterwards. no exceptions.
 
-You can use:
+ur exit options are:
 
-- `*goto label` to move inside the same scene;
-- `*goto_scene scene_name` to move to another file;
-- `*finish` to move to the next scene;
-- `*return` when leaving a subroutine; or
-- another command that clearly ends or redirects the flow.
+- `*goto label` to jump somewhere in the same scene;
+- `*goto_scene scene_name` to jump to another file;
+- `*finish` to move on to the next scene;
+- `*return` when ur leaving a subroutine; or
+- anything else that clearly ends or redirects the flow.
 
-If you forget, you will probably see the famous “illegal to fall out of a choice statement” error.
+forget one and u get the legendary "illegal to fall out of a choice statement" error. u WILL meet this error. we all have.
 
-### When every option comes back together
+### when all the options come back together
 
-Use `*fake_choice` when the options should all continue after the menu.
+use `*fake_choice` when every option should just continue on after the menu instead of branching off.
 
 ```choicescript
 *temp breakfast ""
@@ -167,11 +167,11 @@ Use `*fake_choice` when the options should all continue after the menu.
 You chose ${breakfast}.
 ```
 
-This is perfect for flavor choices, appearance choices, names, or small preference decisions.
+this is perfect for flavor stuff, appearance, names, little preference choices, whatever. stuff that colors the story but doesnt actually split it.
 
-### Hide or disable options
+### hiding or disabling options
 
-Use `*if` to hide an option completely:
+use `*if` to hide an option completely, like it was never there:
 
 ```choicescript
 *choice
@@ -182,7 +182,7 @@ Use `*if` to hide an option completely:
     *goto street
 ```
 
-Use `*selectable_if` to show the option but leave it unavailable:
+use `*selectable_if` to still SHOW the option but leave it grayed out and unpickable:
 
 ```choicescript
 *choice
@@ -193,11 +193,11 @@ Use `*selectable_if` to show the option but leave it unavailable:
     *goto dock
 ```
 
-That distinction matters. Hidden information and visible-but-locked information feel very different to a player.
+that difference actually matters a lot. "u dont see the option at all" vs "u see it but cant afford it yet" feel completely different to a player. use it on purpose.
 
-## Stats and variables
+## stats and variables
 
-You will use variables for almost everything:
+ur gonna use variables for basically everything:
 
 - player names;
 - relationship values;
@@ -205,11 +205,11 @@ You will use variables for almost everything:
 - flags;
 - personality stats;
 - chapter progress; and
-- decisions from earlier scenes.
+- decisions from way earlier in the story.
 
-### Permanent stats
+### permanent stats
 
-Use `*create` in `startup.txt`:
+use `*create` in `startup.txt`:
 
 ```choicescript
 *create courage 50
@@ -218,20 +218,20 @@ Use `*create` in `startup.txt`:
 *create player_name ""
 ```
 
-These survive scene changes.
+these stick around through scene changes. they live for the whole game.
 
-### Temporary variables
+### temporary variables
 
-Use `*temp` inside a scene:
+use `*temp` inside a scene:
 
 ```choicescript
 *temp roll
 *temp chosen_door
 ```
 
-These disappear when you move to another scene.
+these vanish the moment u move to another scene. good for throwaway stuff.
 
-### Change a value
+### changing a value
 
 ```choicescript
 *set courage 70
@@ -239,41 +239,41 @@ These disappear when you move to another scene.
 *set player_name "Ari"
 ```
 
-You can also write:
+u can also do:
 
 ```choicescript
 *set courage +10
 ```
 
-That means “take the current value of courage and add ten.”
+which just means "take whatever courage is right now and add ten." handy.
 
-## Put variables into the story
+## putting variables into the story
 
-Use `${}`:
+use `${}`:
 
 ```choicescript
 "${player_name}," the captain says, "we need an answer."
 ```
 
-Use `$!{}` to capitalize the first letter:
+use `$!{}` to capitalize the first letter:
 
 ```choicescript
 $!{player_name} steps forward.
 ```
 
-Use `$!!{}` for uppercase.
+and `$!!{}` for full UPPERCASE if ur feeling dramatic.
 
-ChoiceScript also has multireplace:
+choicescript also has this thing called multireplace:
 
 ```choicescript
 You are known as a @{rank novice|veteran|legend}.
 ```
 
-Here, `rank` must resolve to `1`, `2`, or `3`.
+here `rank` has to come out to `1`, `2`, or `3`, and it picks the matching word. super useful for not writing three near-identical sentences.
 
-## Conditions
+## conditions
 
-A basic conditional:
+the basic conditional:
 
 ```choicescript
 *if courage >= 60
@@ -284,7 +284,7 @@ A basic conditional:
   *goto afraid
 ```
 
-Add middle branches with `*elseif` or `*elsif`.
+want middle branches? use `*elseif` or `*elsif` (both spellings work, pick one):
 
 ```choicescript
 *if reputation >= 80
@@ -298,7 +298,7 @@ Add middle branches with `*elseif` or `*elsif`.
   *goto unknown
 ```
 
-When combining tests, use parentheses:
+when ur combining tests, wrap them in parentheses:
 
 ```choicescript
 *if (courage > 50) and (health > 0)
@@ -306,11 +306,11 @@ When combining tests, use parentheses:
   *goto battle
 ```
 
-ChoiceScript does not like ambiguous expressions. Parentheses are your friend.
+choicescript really doesnt like ambiguous expressions. parentheses are ur friend. use way more of them than u think u need.
 
-## The expression rules you actually need first
+## the expression rules u actually need first
 
-Start with these:
+dont learn all of these at once. start with these:
 
 | Operator | Meaning |
 |---|---|
@@ -325,7 +325,7 @@ Start with these:
 | `and`, `or` | Combine conditions |
 | `modulo` | Remainder |
 
-You can also use:
+theres also a few functions:
 
 - `round(expr)`;
 - `not(expr)`;
@@ -333,22 +333,22 @@ You can also use:
 - `log(expr)`; and
 - `timestamp(dateString)`.
 
-### Fairmath
+### fairmath
 
-ChoiceScript has special percentage math:
+choicescript has this special percentage math:
 
 ```choicescript
 *set trust %+20
 *set trust %-20
 ```
 
-Fairmath makes stats harder to push toward the extremes. It is useful for opposed personality stats and relationships.
+fairmath makes it harder to shove a stat all the way to 0 or 100, cuz each change is a percentage of the room thats left. its great for opposed personality stats and relationship meters where u dont want things maxing out instantly.
 
-A bare `%` does not work.
+heads up: a bare `%` on its own does nothing. u need the `+` or `-` with it.
 
-## Labels and jumping around
+## labels and jumping around
 
-Labels are destinations inside one scene.
+labels are just destinations inside one scene.
 
 ```choicescript
 *label town_square
@@ -362,44 +362,44 @@ The fountain is dry.
     *goto inn
 ```
 
-Labels:
+labels:
 
-- are local to the current scene;
-- cannot contain spaces; and
-- must be unique in that scene.
+- are local to the current scene (they dont reach across files);
+- cant have spaces in them; and
+- have to be unique within that scene.
 
-Use `*gotoref` when the label name comes from an expression.
+if the label name itself comes from an expression, use `*gotoref` instead.
 
-## Moving between scene files
+## moving between scene files
 
-Use:
+use:
 
 ```choicescript
 *goto_scene chapter_two
 ```
 
-You can also target a label:
+u can also aim straight at a label inside that scene:
 
 ```choicescript
 *goto_scene chapter_two secret_entrance
 ```
 
-Use `*finish` when you simply want the next scene from `*scene_list`.
+use `*finish` when u just want the next scene from `*scene_list` without naming it:
 
 ```choicescript
 *finish Next Chapter
 ```
 
-## Random numbers
+## random numbers
 
-Roll a die:
+roll a die:
 
 ```choicescript
 *temp roll
 *rand roll 1 6
 ```
 
-Then test the result:
+then test what u got:
 
 ```choicescript
 *if roll >= 5
@@ -410,13 +410,13 @@ Then test the result:
   *goto failure
 ```
 
-ChoiceScript can also jump to a random scene with `*goto_random_scene`.
+choicescript can also send the player off to a random scene with `*goto_random_scene`.
 
-By default, selected scenes are not reused during the same playthrough unless you allow reuse.
+by default it wont reuse a scene it already picked during the same playthrough, unless u specifically tell it reuse is allowed.
 
-## Ask the player for text or numbers
+## asking the player for text or numbers
 
-Text input:
+text input:
 
 ```choicescript
 What is your name?
@@ -424,9 +424,9 @@ What is your name?
 *input_text player_name
 ```
 
-Long text or blank text can be allowed with optional modifiers.
+u can allow longer text or blank text with some optional modifiers.
 
-Number input:
+number input:
 
 ```choicescript
 How old are you?
@@ -434,34 +434,34 @@ How old are you?
 *input_number age 18 120
 ```
 
-The engine checks that the answer is inside the range.
+the engine makes sure the answer lands inside the range u gave it, so no one is entering "420" for their age. probably.
 
-## Arrays, without pretending they are normal arrays
+## arrays, without pretending theyre normal arrays
 
-ChoiceScript arrays are really numbered variables.
+choicescript arrays are really just numbered variables wearing a trenchcoat.
 
 ```choicescript
 *create_array inventory 3 ""
 ```
 
-That gives you:
+that hands u:
 
 - `inventory_1`;
 - `inventory_2`;
 - `inventory_3`; and
 - `inventory_count`.
 
-You can also use bracket notation:
+u can also use bracket notation, which is nicer to read:
 
 ```choicescript
 ${inventory[2]}
 ```
 
-Use `*temp_array` for an array that only needs to exist in the current scene.
+use `*temp_array` when u only need the array to exist in the current scene.
 
-## Reusable logic with subroutines
+## reusable logic with subroutines
 
-Use `*gosub` when you keep repeating the same block of logic.
+when u keep writing the same block of logic over and over, use `*gosub`:
 
 ```choicescript
 *gosub change_reputation 5
@@ -473,13 +473,13 @@ Use `*gosub` when you keep repeating the same block of logic.
 *return
 ```
 
-Use `*gosub_scene` when the reusable logic lives in another scene file.
+if the reusable logic lives in a different scene file, use `*gosub_scene` instead.
 
-The arguments are available through the names in `*params`, and also through `param_1`, `param_2`, and `param_count`.
+the arguments come through the names u put in `*params`, and also through `param_1`, `param_2`, `param_count` if u prefer.
 
-## Build a stats screen
+## building a stats screen
 
-Create `choicescript_stats.txt` and use `*stat_chart`.
+make a `choicescript_stats.txt` and use `*stat_chart`:
 
 ```choicescript
 *stat_chart
@@ -491,37 +491,37 @@ Create `choicescript_stats.txt` and use `*stat_chart`.
     Chaos
 ```
 
-Available chart rows are:
+the chart row types u can use are:
 
 - `text`;
 - `percent`; and
 - `opposed_pair`.
 
-## Reusing choice options
+## reusing choice options
 
-Sometimes a menu appears more than once.
+sometimes the same menu shows up more than once, and u want to control what happens to already-picked options.
 
-- `*hide_reuse` removes a previously chosen option.
+- `*hide_reuse` removes an option the player already chose.
 - `*disable_reuse` leaves it visible but grayed out.
-- `*allow_reuse` lets the player choose it again.
+- `*allow_reuse` lets them pick it again freely.
 
-You can set this behavior for later options in the scene or apply it to one option.
+u can set this for all the later options in a scene, or slap it on one single option.
 
-## Saving
+## saving
 
-ChoiceScript includes several save systems.
+choicescript comes with a few save systems:
 
-- `*save_game` opens a platform save flow.
+- `*save_game` opens the platform save flow.
 - `*restore_game` restores a saved game.
-- `*show_password` displays the classic encoded ChoiceScript save password.
-- `*save_checkpoint` records a checkpoint.
-- `*restore_checkpoint` loads it.
+- `*show_password` shows the classic encoded choicescript save password (very retro).
+- `*save_checkpoint` drops a checkpoint.
+- `*restore_checkpoint` loads it back.
 
-Named checkpoint slots use letters, numbers, and underscores.
+named checkpoint slots can use letters, numbers, and underscores.
 
-## Achievements
+## achievements
 
-Achievements are declared in `startup.txt`.
+u declare achievements up in `startup.txt`:
 
 ```choicescript
 *achievement first_step visible 10 First Step
@@ -529,17 +529,17 @@ Achievements are declared in `startup.txt`.
   You began the journey.
 ```
 
-Grant one later with:
+then grant one later with:
 
 ```choicescript
 *achieve first_step
 ```
 
-There are strict limits on achievement names, titles, descriptions, points, duplicates, and totals. Hidden achievements have additional rules.
+theres strict limits on achievement names, titles, descriptions, points, duplicates, and totals. hidden achievements have extra rules on top. so dont go too wild.
 
-## Images, sound, video, and links
+## images, sound, video, and links
 
-ChoiceScript can display or play media:
+choicescript can show or play media:
 
 ```choicescript
 *image castle.jpg center A castle at dusk
@@ -549,23 +549,23 @@ ChoiceScript can display or play media:
 *link_button https://example.com Open website
 ```
 
-There are also:
+theres also:
 
-- `*text_image` for assets that should adapt to light and dark mode;
+- `*text_image` for stuff that should adapt to light and dark mode;
 - `*kindle_image`;
 - `*kindle_search`; and
 - `*kindle_product`.
 
-Some commands only do anything on specific platforms.
+fair warning, some of these only actually do anything on specific platforms.
 
-## Store and platform commands
+## store and platform commands
 
-ChoiceScript includes engine commands for commercial releases:
+choicescript has a whole pile of engine commands for commercial releases:
 
 - purchases;
 - discounts;
 - restoring purchases;
-- advertisements;
+- ads;
 - timed delays;
 - login and registration;
 - subscriptions;
@@ -573,7 +573,7 @@ ChoiceScript includes engine commands for commercial releases:
 - feedback prompts; and
 - platform checks.
 
-You will see commands such as:
+so ull run into commands like:
 
 - `*check_purchase`;
 - `*purchase`;
@@ -584,15 +584,15 @@ You will see commands such as:
 - `*subscribe`; and
 - `*share_this_game`.
 
-:::note You may not need these immediately
-For a first local project, focus on prose, variables, choices, conditions, labels, scenes, and testing. Store and platform commands matter later, when you are preparing an actual release.
+:::note u dont need these yet
+for ur first little local project, just focus on prose, variables, choices, conditions, labels, scenes, and testing. all the store and platform stuff matters later, when ur actually prepping a real release. dont let it scare u off now.
 :::
 
-## Useful built-in variables
+## useful built-in variables
 
-ChoiceScript reserves names beginning with `choice_`.
+choicescript reserves any name that starts with `choice_` for itself.
 
-You can read built-in variables such as:
+u can read built-in ones like:
 
 - `choice_scene`;
 - `choice_linenum`;
@@ -604,51 +604,51 @@ You can read built-in variables such as:
 - `choice_randomtest`; and
 - `choice_quicktest`.
 
-Do not try to create your own variables beginning with `choice_`.
+and dont try to make ur own variables starting with `choice_`. thats the engines turf.
 
-## The errors you will meet
+## the errors ur gonna meet
+
+ur gonna see these. everyone does. heres what theyre actually mad about:
 
 ### `Non-existent command`
 
-You misspelled a command, invented one, or used a choice-only modifier in the wrong place.
+u misspelled a command, made one up, or used a choice-only modifier somewhere it doesnt belong.
 
 ### `Non-existent variable`
 
-You used a variable before declaring it with `*create` or `*temp`.
+u used a variable before declaring it with `*create` or `*temp`.
 
 ### `Illegal mixing of spaces and tabs`
 
-Your file contains both indentation styles.
+ur file has both indentation styles in it. pick one, told u so.
 
 ### `invalid indent`
 
-Sibling lines do not line up, or a block has the wrong indentation.
+sibling lines dont line up, or a block is indented wrong.
 
 ### `increasing indent not allowed`
 
-You indented even though the previous line did not open a block.
+u indented even though the line before it didnt open a block.
 
 ### `It is illegal to fall out of a *choice statement`
 
-An option reached the end of its block without a jump, finish, return, or other explicit exit.
+an option hit the end of its block without a goto, finish, return, or any other clear exit. the classic.
 
 ### `Neither true nor false`
 
-A condition received something that was not a valid boolean.
+a condition got handed something that wasnt a valid true/false.
 
 ### `Not a number`
 
-A numeric expression received text or another non-numeric value.
+a numeric expression got text or some other non-number thrown at it.
 
 ### `visited this line too many times`
 
-A loop kept jumping to the same line beyond the current `*looplimit`.
+a loop kept jumping back to the same line past the current `*looplimit`. usually an infinite loop u didnt mean to write.
 
-## A sensible learning order
+## a sensible order to actually learn this in
 
-Do not try to memorize every command.
-
-Learn these first:
+dont try to memorize every command. u will lose ur mind. learn these first:
 
 1. prose and paragraphs;
 2. indentation;
@@ -661,9 +661,9 @@ Learn these first:
 9. `*input_text`, `*input_number`, and `*rand`; and
 10. `*stat_chart`.
 
-Then move into subroutines, arrays, achievements, saves, platform commands, and commercial integrations.
+once those feel natural, THEN wander into subroutines, arrays, achievements, saves, platform commands, and all the commercial integration stuff.
 
-## A tiny complete example
+## a tiny complete example
 
 `startup.txt`:
 
@@ -713,20 +713,20 @@ $!{player_name} turns away from the platform.
 *ending
 ```
 
-:::tip Test constantly
-The language is simple, but indentation and flow errors can become difficult to trace in a large scene. Test after every meaningful branch.
+:::tip test constantly
+the language itself is simple, but indentation and flow errors get really annoying to trace once a scene gets big. so test after every meaningful branch instead of writing 500 lines and praying.
 :::
 
-## Every top-level command
+## every top-level command
 
-Here is the full command set recognized by the engine:
+heres the full set of commands the engine actually knows, in case u ever wanna check if something's real:
 
 `abort` · `achieve` · `achievement` · `advertisement` · `ai` · `allow_reuse` · `author` · `bug` · `check_achievements` · `check_purchase` · `check_registration` · `choice` · `comment` · `config` · `create` · `create_array` · `delay_break` · `delay_ending` · `delete` · `delete_array` · `disable_reuse` · `else` · `elseif` · `elsif` · `end_trial` · `ending` · `fake_choice` · `feedback` · `finish` · `finish_advertisement` · `gosub` · `gosub_scene` · `goto` · `goto_random_scene` · `goto_scene` · `gotoref` · `hide_reuse` · `if` · `ifid` · `image` · `input_number` · `input_text` · `kindle_image` · `kindle_product` · `kindle_search` · `label` · `line_break` · `link` · `link_button` · `login` · `looplimit` · `more_games` · `page_break` · `page_break_advertisement` · `params` · `print` · `print_discount` · `product` · `purchase` · `purchase_discount` · `rand` · `redirect_scene` · `reset` · `restart` · `restore_checkpoint` · `restore_game` · `restore_purchases` · `return` · `save_checkpoint` · `save_game` · `scene_list` · `script` · `set` · `setref` · `share_this_game` · `show_password` · `sound` · `stat_chart` · `subscribe` · `temp` · `temp_array` · `text_image` · `timer` · `title` · `track_event` · `youtube`
 
-Choice-body-only modifiers include `*selectable_if`, `*random_weight`, and the choice-scoped forms of condition and reuse commands.
+choice-body-only modifiers include `*selectable_if`, `*random_weight`, and the choice-scoped forms of the condition and reuse commands.
 
-PS. The source reference goes much deeper into the exact argument grammar and engine behavior of every command. This version is meant to get you writing without losing the underlying technical accuracy.
+PS. the source reference goes way deeper into the exact argument grammar and engine behavior of every single command. this version is just meant to get u writing without lying to u about how any of it works.
 
 :::tip 💖
-Made with love by [kmab](https://kmab5.github.io).
+made with love by [kmab](https://kmab5.github.io).
 :::

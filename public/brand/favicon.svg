@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="kmab5">
+  <rect x="0" y="0" width="64" height="64" rx="15" fill="#161a26"/>
+  <g transform="translate(20 12) scale(1.0)">
+    <path d="M12 2.5 C 15.2 7.5 17.5 10.6 17.5 14.5 a 5.5 5.5 0 1 1 -11 0 C 6.5 10.6 8.8 7.5 12 2.5 Z" fill="#2f9aa5" transform="scale(1.6)"/>
+    <path d="M12 10.5 C 13.4 12.4 14 13.4 14 14.8 a 2 2 0 1 1 -4 0 C 10 13.6 10.8 12.4 12 10.5 Z" fill="#bfe6ea" transform="scale(1.6)"/>
+  </g>
+</svg>

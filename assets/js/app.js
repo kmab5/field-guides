@@ -7,7 +7,6 @@
 const REPO_URL = "https://github.com/kmab5/field-guides";
 
 const VERSIONS = ["informal", "formal"];
-const STAMP = { informal: "draft", formal: "reviewed" };
 const DEFAULT_CALLOUT_LABEL = {
   note: "note",
   tip: "tip",
@@ -28,7 +27,6 @@ const state = {
   manifest: null,
   slug: null,
   version: null,
-  lastVersion: null,
   mdCache: new Map(),
   headings: [],
 };
@@ -248,20 +246,12 @@ async function renderCurrent() {
   const article = $("#article");
   const versionData = guide.versions[state.version];
 
-  // chrome: toggle + stamp + meta
+  // chrome: register switch (checked = formal) + register accent
   reader.dataset.version = state.version;
-  $("#btnInformal").setAttribute("aria-pressed", String(state.version === "informal"));
-  $("#btnFormal").setAttribute("aria-pressed", String(state.version === "formal"));
-  $("#btnInformal").disabled = !guide.versions.informal;
-  $("#btnFormal").disabled = !guide.versions.formal;
+  $("#regSwitch").setAttribute("aria-checked", String(state.version === "formal"));
 
-  const stamp = $("#stamp");
-  stamp.textContent = STAMP[state.version];
-  if (state.lastVersion && state.lastVersion !== state.version) {
-    stamp.classList.remove("press");
-    void stamp.offsetWidth; // restart animation
-    stamp.classList.add("press");
-  }
+  // Google Translate bar shows only on an actual formal guide
+  $("#translateBar").hidden = !(state.version === "formal" && versionData);
 
   // sidebar active state
   document.querySelectorAll(".guide-item").forEach((a) =>
@@ -274,7 +264,6 @@ async function renderCurrent() {
     $("#wipBanner").hidden = true;
     article.innerHTML = `<div class="coming-soon"><strong>${state.version === "formal" ? "Formal" : "Informal"} version coming soon</strong>This guide hasn't been ${state.version === "formal" ? "revised into a formal version" : "drafted"} yet. Switch versions using the toggle above.</div>`;
     $("#tocList").innerHTML = "";
-    state.lastVersion = state.version;
     document.title = `${guide.title} · kmab5 field guides`;
     $("#kicker").innerHTML = "Field guide · " + escapeHtml(guide.title);
     return;
@@ -302,7 +291,6 @@ async function renderCurrent() {
     $("#tocList").innerHTML = "";
   }
 
-  state.lastVersion = state.version;
 }
 
 /* ---------- routing ---------- */
@@ -376,14 +364,33 @@ function toggleTheme() {
   localStorage.setItem("ytb-theme", next);
 }
 
-/* ---------- mobile drawer ---------- */
+/* ---------- sidebar: desktop collapse + mobile drawer ---------- */
+const mqDesktop = window.matchMedia("(min-width: 861px)");
+
 function openDrawer() {
   document.body.classList.add("nav-open");
   $("#menuBtn").setAttribute("aria-expanded", "true");
 }
 function closeDrawer() {
   document.body.classList.remove("nav-open");
-  $("#menuBtn").setAttribute("aria-expanded", "false");
+  if (!mqDesktop.matches) $("#menuBtn").setAttribute("aria-expanded", "false");
+}
+
+// The topbar button collapses the sidebar on desktop and opens the drawer on mobile.
+function toggleSidebar() {
+  if (mqDesktop.matches) {
+    const collapsed = document.body.classList.toggle("sidebar-collapsed");
+    localStorage.setItem("ytb-sidebar", collapsed ? "collapsed" : "open");
+    $("#menuBtn").setAttribute("aria-expanded", String(!collapsed));
+  } else {
+    document.body.classList.contains("nav-open") ? closeDrawer() : openDrawer();
+  }
+}
+
+function initSidebar() {
+  const collapsed = mqDesktop.matches && localStorage.getItem("ytb-sidebar") === "collapsed";
+  document.body.classList.toggle("sidebar-collapsed", collapsed);
+  $("#menuBtn").setAttribute("aria-expanded", String(!collapsed));
 }
 
 /* ---------- wiring ---------- */
@@ -394,9 +401,7 @@ function wireEvents() {
 
   $("#themeBtn").addEventListener("click", toggleTheme);
 
-  $("#menuBtn").addEventListener("click", () =>
-    document.body.classList.contains("nav-open") ? closeDrawer() : openDrawer()
-  );
+  $("#menuBtn").addEventListener("click", toggleSidebar);
   $("#scrim").addEventListener("click", closeDrawer);
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeDrawer();
@@ -404,11 +409,9 @@ function wireEvents() {
 
   $("#search").addEventListener("input", (e) => renderSidebar(e.target.value));
 
-  // version toggle
-  $("#toggle").addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-version]");
-    if (!btn || btn.disabled) return;
-    navigate(state.slug, btn.dataset.version);
+  // register switch (informal <-> formal)
+  $("#regSwitch").addEventListener("click", () => {
+    navigate(state.slug, state.version === "formal" ? "informal" : "formal");
   });
 
   // in-page anchors (article anchors + toc) — smooth scroll without touching the route hash
@@ -442,6 +445,7 @@ async function init() {
 
   renderSidebar();
   wireEvents();
+  initSidebar();
 
   // ensure the URL reflects a real route for sharing/bookmarking
   const r = parseRoute();

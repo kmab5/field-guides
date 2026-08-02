@@ -1,8 +1,10 @@
 /* =========================================================================
    yatay geçiş field guide — stylesheet
    Design concept: an official Turkish transfer directive, annotated by a real
-   student. Two registers (informal = draft, formal = reviewed) carry two
-   accent colours. Teal is the "official" brand; stamp-red is the "draft" hand.
+   student. Two registers (informal / formal) switch from the topbar and carry
+   two accent colours. Teal is the "official" brand; red is the "informal" hand.
+   Callout hues (note/tip/warning/important/tl;dr) are fixed and independent of
+   the register accent so they never collide.
    Type: Newsreader (serif display) · Public Sans (body) · Space Mono (labels).
    ========================================================================= */
 
@@ -29,6 +31,15 @@
 
   --amber:         oklch(0.62 0.14 70);
   --amber-soft:    oklch(0.95 0.05 80);
+
+  /* fixed, register-independent callout hues */
+  --info:          oklch(0.53 0.13 250);
+  --info-strong:   oklch(0.46 0.14 250);
+  --info-soft:     oklch(0.95 0.03 250);
+
+  --violet:        oklch(0.53 0.16 300);
+  --violet-strong: oklch(0.46 0.17 300);
+  --violet-soft:   oklch(0.95 0.035 305);
 
   --accent:        var(--teal);
   --accent-strong: var(--teal-strong);
@@ -80,6 +91,14 @@
 
   --amber:         oklch(0.78 0.13 78);
   --amber-soft:    oklch(0.32 0.05 78);
+
+  --info:          oklch(0.74 0.11 250);
+  --info-strong:   oklch(0.82 0.10 250);
+  --info-soft:     oklch(0.31 0.05 255);
+
+  --violet:        oklch(0.76 0.13 300);
+  --violet-strong: oklch(0.83 0.11 300);
+  --violet-soft:   oklch(0.32 0.06 305);
 
   --shadow-sm: 0 1px 2px oklch(0 0 0 / 0.4);
   --shadow-md: 0 8px 28px oklch(0 0 0 / 0.5);
@@ -134,13 +153,22 @@ input { font: inherit; }
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
+.topbar-left { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  text-decoration: none;
+  align-items: center;
+  gap: 9px;
   min-width: 0;
 }
+.brand-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: none;
+  color: var(--teal);
+}
+.brand-logo svg { width: 23px; height: 23px; }
 .brand-mark {
   font-family: var(--mono);
   font-weight: 700;
@@ -164,7 +192,7 @@ input { font: inherit; }
   text-overflow: ellipsis;
 }
 .brand-name em { font-style: italic; color: var(--teal); }
-.topbar-actions { display: flex; align-items: center; gap: 6px; }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
 
 .icon-btn {
   display: inline-grid;
@@ -178,10 +206,56 @@ input { font: inherit; }
 }
 .icon-btn:hover { background: var(--surface-2); color: var(--ink); border-color: var(--border); }
 .icon-btn svg { width: 19px; height: 19px; }
-.menu-btn { display: none; }
+.menu-btn { display: inline-grid; }
 .theme-icon-dark { display: none; }
 :root[data-theme="dark"] .theme-icon-light { display: none; }
 :root[data-theme="dark"] .theme-icon-dark { display: block; }
+
+/* ---------- register switch (topbar) ---------- */
+.reg-toggle { display: flex; align-items: center; gap: 9px; }
+.reg-label {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  user-select: none;
+  transition: color 0.2s var(--ease);
+}
+.reg-toggle:has([aria-checked="false"]) .reg-label-informal { color: var(--red-strong); }
+.reg-toggle:has([aria-checked="true"])  .reg-label-formal   { color: var(--teal-strong); }
+:root[data-theme="dark"] .reg-toggle:has([aria-checked="false"]) .reg-label-informal { color: var(--red); }
+:root[data-theme="dark"] .reg-toggle:has([aria-checked="true"])  .reg-label-formal   { color: var(--teal); }
+
+.reg-switch {
+  --sw-accent: var(--red);
+  position: relative;
+  width: 46px;
+  height: 25px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  flex: none;
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.reg-switch:hover { border-color: var(--muted); }
+.reg-knob {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--sw-accent);
+  box-shadow: var(--shadow-sm);
+  transition: left 0.28s var(--ease), background 0.25s var(--ease);
+}
+.reg-switch[aria-checked="true"] {
+  --sw-accent: var(--teal);
+  border-color: color-mix(in oklch, var(--teal) 45%, var(--border-strong));
+}
+.reg-switch[aria-checked="true"] .reg-knob { left: 26px; }
 
 /* ---------- layout ---------- */
 .layout {
@@ -328,90 +402,13 @@ input { font: inherit; }
   background: var(--accent);
 }
 
-.doc-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-/* register toggle — segmented control */
-.toggle {
-  display: inline-flex;
-  padding: 4px;
-  border-radius: 11px;
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  position: relative;
-}
-.toggle-thumb {
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  width: calc(50% - 4px);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid color-mix(in oklch, var(--accent) 40%, var(--border));
-  transition: transform 0.34s var(--ease), border-color 0.34s var(--ease);
-}
-.reader[data-version="formal"] .toggle-thumb { transform: translateX(calc(100% + 4px)); }
-.toggle button {
-  position: relative;
-  z-index: 1;
-  padding: 7px 18px;
-  border-radius: 8px;
-  font-family: var(--mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color 0.2s var(--ease);
-  min-width: 96px;
-  text-align: center;
-}
-.toggle button[aria-pressed="true"] { color: var(--accent-strong); }
-.toggle button:disabled { color: color-mix(in oklch, var(--muted) 55%, transparent); cursor: not-allowed; }
-
-.doc-meta { display: flex; align-items: center; gap: 18px; }
 .updated {
   font-family: var(--mono);
   font-size: 0.72rem;
   color: var(--muted);
   white-space: nowrap;
 }
-
-/* the stamp — signature element */
-.stamp {
-  font-family: var(--mono);
-  font-weight: 700;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 2px solid var(--accent);
-  border-radius: 7px;
-  padding: 6px 11px;
-  transform: rotate(-4deg);
-  opacity: 0.9;
-  position: relative;
-  transition: color 0.34s var(--ease), border-color 0.34s var(--ease);
-}
-.stamp::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border: 1px solid currentColor;
-  border-radius: 4px;
-  opacity: 0.35;
-}
-.stamp.press { animation: stamp 0.4s var(--ease); }
-@keyframes stamp {
-  0%   { transform: rotate(-4deg) scale(1.35); opacity: 0; }
-  55%  { transform: rotate(-7deg) scale(0.92); opacity: 1; }
-  100% { transform: rotate(-4deg) scale(1); opacity: 0.9; }
-}
+.updated:empty { display: none; }
 
 .wip-banner {
   margin-top: 22px;
@@ -567,14 +564,25 @@ input { font: inherit; }
 .callout-body > * + * { margin-top: 0.7em; }
 .callout-body > :first-child { margin-top: 0; }
 
-.callout-tldr, .callout-note {
-  background: color-mix(in oklch, var(--accent-soft) 45%, var(--surface));
-  border-color: color-mix(in oklch, var(--accent) 35%, var(--border));
+/* Each callout type has its own fixed hue, independent of the informal/formal
+   register accent — so note, tip, important, warning and tl;dr always stay
+   visually distinct in both versions and both themes. */
+.callout-tldr {
+  background: color-mix(in oklch, var(--violet-soft) 55%, var(--surface));
+  border-color: color-mix(in oklch, var(--violet) 35%, var(--border));
 }
-.callout-tldr .callout-title, .callout-note .callout-title { color: var(--accent-strong); }
+.callout-tldr .callout-title { color: var(--violet-strong); }
+:root[data-theme="dark"] .callout-tldr .callout-title { color: var(--violet); }
+
+.callout-note {
+  background: color-mix(in oklch, var(--info-soft) 55%, var(--surface));
+  border-color: color-mix(in oklch, var(--info) 35%, var(--border));
+}
+.callout-note .callout-title { color: var(--info-strong); }
+:root[data-theme="dark"] .callout-note .callout-title { color: var(--info); }
 
 .callout-tip {
-  background: color-mix(in oklch, var(--teal-soft) 40%, var(--surface));
+  background: color-mix(in oklch, var(--teal-soft) 45%, var(--surface));
   border-color: color-mix(in oklch, var(--teal) 32%, var(--border));
 }
 .callout-tip .callout-title { color: var(--teal-strong); }
@@ -646,6 +654,48 @@ input { font: inherit; }
 .reader[data-version="informal"] { --accent: var(--red); --accent-strong: var(--red-strong); --accent-soft: var(--red-soft); }
 .reader[data-version="formal"]   { --accent: var(--teal); --accent-strong: var(--teal-strong); --accent-soft: var(--teal-soft); }
 
+/* ---------- google translate bar (formal only) ---------- */
+.translate-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 7px 20px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.translate-label {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.translate-note { margin-left: auto; opacity: 0.7; }
+#google_translate_element { display: inline-flex; align-items: center; }
+/* tame the widget's default chrome so it fits the design */
+#google_translate_element .goog-te-gadget { font-size: 0 !important; color: transparent !important; }
+#google_translate_element .goog-te-gadget > span { display: none; }
+#google_translate_element select.goog-te-combo {
+  margin: 0 !important;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+/* Google injects a fixed top banner + shifts the body; suppress both so our
+   own bar is the single translate control. Translation still works. */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon { display: none !important; }
+body { top: 0 !important; }
+.goog-tooltip, .goog-tooltip * { display: none !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+
 /* ---------- coming soon ---------- */
 .coming-soon {
   max-width: var(--measure);
@@ -675,6 +725,20 @@ input { font: inherit; }
   .toc { display: none; }
 }
 
+/* desktop: hide/show the sidebar with the topbar button */
+@media (min-width: 861px) {
+  .layout { transition: grid-template-columns 0.28s var(--ease); }
+  body.sidebar-collapsed .sidebar { display: none; }
+  body.sidebar-collapsed .layout { grid-template-columns: minmax(0, 1fr) var(--toc-w); }
+}
+@media (min-width: 861px) and (max-width: 1160px) {
+  body.sidebar-collapsed .layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .reg-label { display: none; }
+}
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
   .menu-btn { display: inline-grid; }
@@ -693,12 +757,10 @@ input { font: inherit; }
   body.nav-open .sidebar { transform: translateX(0); padding-top: var(--topbar-h); }
   body.nav-open .scrim { opacity: 1; visibility: visible; }
   .reader { padding: 30px clamp(18px, 6vw, 40px) 80px; }
-  .doc-controls { align-items: flex-start; }
 }
 
 @media (max-width: 460px) {
   .brand-name { display: none; }
-  .doc-meta { width: 100%; justify-content: space-between; }
 }
 
 /* ---------- reduced motion ---------- */

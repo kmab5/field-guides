@@ -7,7 +7,9 @@ Every guide can exist in two registers:
 - **Informal** — the student's own draft voice (always present).
 - **Formal** — a revised, cleaned-up version (added when you're ready).
 
-A toggle in the reader switches between them, and the little status stamp flips from **draft** (informal) to **reviewed** (formal).
+A switch in the top bar (next to the dark-mode button) flips between them; the reader's accent colour shifts to match — red for informal, teal for formal.
+
+The top bar also has a button to hide/show the sidebar (it collapses the sidebar on desktop and opens the guide drawer on mobile), and the **formal** version of any guide shows a Google Translate bar across the top so readers can translate the page into their own language.
 
 ---
 
@@ -74,7 +76,7 @@ wip: true
 | `title` | Sidebar + browser-tab title. Falls back to the first `# heading`, then the filename. The informal file's title is used for the pair. |
 | `description` | Short blurb under the title in the sidebar. |
 | `order` | Sort position in the sidebar (lower first). Lowest-ordered guide is the default landing page. |
-| `updated` | Date shown next to the version toggle. Falls back to the file's modified date. |
+| `updated` | Date shown under the guide title. Falls back to the file's modified date. |
 | `wip` | `true` shows the amber "still being written" banner and a dot in the sidebar. |
 
 The parser understands strings, numbers, and `true`/`false` — that's all you need here.
@@ -107,11 +109,11 @@ Apply as a 2nd/3rd-year student — never as a credit-transferred first year.
 :::
 ```
 
-Types: `note`, `tip`, `warning`, `important` (anything unrecognized renders as `note`). The inside is full Markdown.
+Types: `note` (blue), `tip` (teal), `warning` (amber), `important` (red) — anything unrecognized renders as `note`. Each type has its own fixed colour that stays the same in both the informal and formal versions, so they never blur together. The inside is full Markdown.
 
 ### tl;dr summaries
 
-Any paragraph that starts with `tl;dr:` automatically becomes a summary callout tinted to match the current register:
+Any paragraph that starts with `tl;dr:` automatically becomes a violet summary callout:
 
 ```markdown
 tl;dr: start worrying around mid-to-end of June, but your GPA matters all year.
@@ -130,6 +132,14 @@ Every `##` and `###` heading is collected into the "On this page" rail (visible 
 Standard Markdown tables are wrapped so they scroll horizontally on small screens instead of breaking the layout.
 
 ---
+
+## Brand assets
+
+The favicon and logo live in [`public/brand/`](public/brand/): a minimal teal flame (a nod to the "a candle in the dark" tagline). `favicon.svg` is the modern icon, `favicon.ico` / `favicon-32.png` / `apple-touch-icon.png` are fallbacks wired up in `index.html`, and `logo.svg` / `logo.png` are the standalone mark. To restyle, edit the SVGs; the flame in the top bar is inlined in `index.html` and takes its colour from CSS.
+
+## Google Translate on the formal version
+
+The formal version of each guide shows a Google Translate bar at the top of the page. It's the free client-side **Website Translator** widget — there's nothing to sign up for and no API key. The widget script is already in `index.html`; it only needs the site to be served over HTTP (it won't run from `file://`), which GitHub Pages does. A couple of things worth knowing: Google translates the whole visible page, and Google no longer offers new Website Translator registrations, though the existing embed script still works. If it's ever discontinued, the site keeps working — the bar simply won't appear.
 
 ## Running locally
 
